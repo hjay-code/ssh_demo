@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "https://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <constant name="struts.devMode" value="false"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.objectFactory" value="spring"/>
+    <constant name="struts.action.extension" value="action,,"/>
+
+    <package name="default" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="loginInterceptor" class="loginInterceptor"/>
+            <interceptor-stack name="appStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="loginInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="appStack"/>
+
+        <global-results>
+            <result name="login">/WEB-INF/jsp/login.jsp</result>
+        </global-results>
+
+        <action name="" class="loginAction" method="input">
+            <interceptor-ref name="defaultStack"/>
+            <result>/WEB-INF/jsp/login.jsp</result>
+        </action>
+
+        <action name="login" class="loginAction" method="login">
+            <interceptor-ref name="defaultStack"/>
+            <result name="success" type="redirectAction">index</result>
+            <result name="input">/WEB-INF/jsp/login.jsp</result>
+        </action>
+
+        <action name="logout" class="loginAction" method="logout">
+            <result type="redirectAction">login</result>
+        </action>
+
+        <action name="index" class="dashboardAction" method="index">
+            <result>/WEB-INF/jsp/index.jsp</result>
+        </action>
+
+        <action name="user-list" class="userAction" method="list">
+            <result>/WEB-INF/jsp/user/list.jsp</result>
+        </action>
+    </package>
+</struts>
